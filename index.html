@@ -474,6 +474,11 @@
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed euismod, nisl vel ultricies lacinia.</p>
                 </div>
                 <div class="benefit-card">
+                    <div class="benefit-icon">3</div>
+                    <h3>Nuevo Beneficio</h3>
+                    <p>Descripción de tu nuevo beneficio aquí.</p>
+                </div>
+                <div class="benefit-card">
                     <div class="benefit-icon">+</div>
                     <h3>Y mucho más</h3>
                     <p>Descubre todos los beneficios que tenemos para ti. Contacta con nosotros para más información.</p>
@@ -577,7 +582,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Mi Negocio. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Portugal Research. Todos los derechos reservados.</p>
             <div class="social-links">
                 <a href="#" class="social-icon">📘</a>
                 <a href="#" class="social-icon">📷</a>
@@ -589,10 +594,48 @@
                 <a href="#">Términos y Condiciones</a>
                 <a href="#contacto">Contacto</a>
             </div>
+            <div id="visitCounter" style="margin-top: 15px; font-size: 10px; color: rgba(255,255,255,0.3);">Visitas: cargando...</div>
         </div>
     </footer>
 
-    <script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.1/firebase-app.min.js";
+        import { getDatabase, ref, onValue, increment, update } from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.1/firebase-database.min.js";
+
+        // Your web app's Firebase configuration
+        // For GitHub Pages, you would replace this with your own config
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Ux-WpybF1WEVxfuZqLlDBvz5-G2AkfA",
+            authDomain: "visit-counter-demo.firebaseapp.com",
+            databaseURL: "https://visit-counter-demo-default-rtdb.firebaseio.com",
+            projectId: "visit-counter-demo",
+            storageBucket: "visit-counter-demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:123456789abcdef"
+        };
+
+        // Initialize Firebase
+        try {
+            const app = initializeApp(firebaseConfig);
+            const database = getDatabase(app);
+            const visitsRef = ref(database, 'visits');
+
+            // Get current visit count and update display
+            onValue(visitsRef, (snapshot) => {
+                const visits = snapshot.val() || 0;
+                document.getElementById('visitCounter').textContent = `Visitas: ${visits}`;
+            });
+
+            // Increment visit counter
+            update(ref(database), {
+                visits: increment(1)
+            });
+        } catch (error) {
+            console.error("Error initializing Firebase: ", error);
+            document.getElementById('visitCounter').textContent = `Visitas: error al cargar`;
+        }
+
         // Navegación responsive
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
